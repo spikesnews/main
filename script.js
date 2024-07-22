@@ -1,8 +1,27 @@
+const translations = {
+en:{share:"Share", copy:"Copy link"},
+es:{share:"Compartir", copy:"Copiar enlace"},
+fr:{share:"Partager", copy:"Copier le lien"},
+de:{share:"Teilen", copy:"Link kopieren"},
+it:{share:"Condividere", copy:"Copia link"},
+pt:{share:"Compartilhar",copy: "Copiar link"},
+ru:{share:"Поделиться", copy:"Скопировать ссылку"},
+zh:{share:"分享", copy:"复制链接"},
+ja:{share:"共有する", copy:"リンクをコピー"},
+ko:{share:"공유하다", copy:"링크 복사"}
+};
+
+const userLanguage = navigator.language;
+const languageWithoutHyphen = userLanguage.split('-')[0];
+const supportedLanguages = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'zh', 'ja', 'ko'];
+const defaultLanguage = 'en';
+const languageToUse = supportedLanguages.includes(languageWithoutHyphen) ? languageWithoutHyphen : defaultLanguage;
+
 document.addEventListener('DOMContentLoaded', () => {
 document.querySelectorAll('li').forEach(li => {
 li.addEventListener('click', (event) => {
 document.querySelectorAll('.menu').forEach(menu => {menu.remove();});
-
+    
 const menu = createMenu(li);
 document.body.appendChild(menu);
 const rect = li.getBoundingClientRect();
@@ -14,7 +33,8 @@ menu.style.display = 'block';
 
 document.addEventListener('click', (event) => {
 if (!event.target.closest('.menu') && !event.target.closest('li')) {
-document.querySelectorAll('.menu').forEach(menu => {menu.remove();});}
+document.querySelectorAll('.menu').forEach(menu => {menu.remove();});
+    }
   });
 });
 
@@ -30,28 +50,29 @@ menu.appendChild(dateDiv);
     
 const shareDiv = document.createElement('div');
 shareDiv.className = 'share';
-shareDiv.textContent = 'Compartilhar';
+shareDiv.textContent = translations[languageToUse].share;
 shareDiv.addEventListener('click', () => {
 if (navigator.share) {
 navigator.share({
-title: 'Compartilhar',
+title: translations[languageToUse].share,
 text: li.textContent,
 url: window.location.href
-}).catch(error => console.error('Error sharing:', error));} else {
-alert('No support');}
+}).catch(error => console.error('Error:', error));
+} else {alert(translations[languageToUse].share + ' error');}
 });
 menu.appendChild(shareDiv);
     
 const copyDiv = document.createElement('div');
 copyDiv.className = 'copy';
-copyDiv.textContent = 'Copiar link';
-copyDiv.addEventListener('click', () => {
+copyDiv.textContent = translations[languageToUse].copy;
+    copyDiv.addEventListener('click', () => {
 const link = `${window.location.href.split('#')[0]}#${li.id}`;
-navigator.clipboard.writeText(link).then(() => {alert('Done');
-}).catch(err => {console.error('Error:', err);
-});
+navigator.clipboard.writeText(link).then(() => {alert(translations[languageToUse].copy + '.');}).catch(err => {
+    console.error('Error:', err);
+    });
 });
 menu.appendChild(copyDiv);
+    
 return menu;
 }
 
