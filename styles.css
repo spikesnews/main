@@ -9,8 +9,7 @@ label{padding-right:.5em}
 ul{margin:.5em; background:#111; border-radius:.5em; padding-top:.5em; height:auto; overflow:hidden}
 li{list-style-type:none; position:relative; padding-bottom:.5em; font-size:1.3em; line-height:1.5em}
 li::before{content:'•'; color:#fff; background:linear-gradient(to bottom,#fcb322,#fcb322,#fc745c,#fc8c4c,#fcb322,#fcb322); height:1.7em; width:8px; font-size:3em; position:absolute; left:-.7em; top:-.1em; z-index:0; cursor:pointer;}
-table{width:100%;}
-#top{margin-top:.3em}
+#top{margin-top:.3em; width:100%;}
 #logos{text-align:center;}
 #logos td{border-bottom:1px solid #777; padding:.3em}
 .fixed{border-radius:2em; background:#000; position:fixed; right:1em; bottom:3em; margin: auto 0;}
