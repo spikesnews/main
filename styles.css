@@ -1,3 +1,4 @@
+html{scroll-behavior: smooth;}
 a{text-decoration:none; color:#fff}
 body{font-family:"Outfit", sans-serif; font-size:.9em; background:#000; color:#fff;}
 button{background:#000; border:none; color:#fff; font-family:"Outfit", sans-serif;}
@@ -8,7 +9,10 @@ label{padding-right:.5em}
 ul{margin:.5em; background:#111; border-radius:.5em; padding-top:.5em; height:auto; overflow:hidden}
 li{list-style-type:none; position:relative; padding-bottom:.5em; font-size:1.3em; line-height:1.5em}
 li::before{content:'•'; color:#fff; background:linear-gradient(to bottom,#fcb322,#fcb322,#fc745c,#fc8c4c,#fcb322,#fcb322); height:1.7em; width:8px; font-size:3em; position:absolute; left:-.7em; top:-.1em; z-index:0; cursor:pointer;}
-td{border-bottom:1px solid #777; padding:.3em}
+table{width:100%;}
+#top{margin-top:.3em}
+#logos{text-align:center;}
+#logos td{border-bottom:1px solid #777; padding:.3em}
 .fixed{border-radius:2em; background:#000; position:fixed; right:1em; bottom:3em; margin: auto 0;}
 .topics{width:100%; overflow:auto; padding-bottom:1em; white-space:nowrap}
 .menu{border:1px solid #fff; background:#000; color:#fff; width:6em; border-radius:.5em; padding:.5em; z-index:1; display:none; position: absolute;}
