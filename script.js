@@ -96,14 +96,35 @@ resultsContainer.appendChild(document.createElement('br'));
 .catch(error => console.error('Error:', error));
 });
 
-const userLanguage = navigator.language;
-const languageWithoutHyphen = userLanguage.split('-')[0];
-const supportedLanguages = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'zh', 'ja', 'ko'];
-const defaultLanguage = 'en';
-const languageToUse = supportedLanguages.includes(languageWithoutHyphen) ? languageWithoutHyphen : defaultLanguage;
+document.querySelectorAll('.results a').forEach(link => {
+link.textContent = link.textContent.replace('topic/', '');
+});
+
 const langElements = document.querySelectorAll('[class^="lang-"]');
 langElements.forEach((element) => {
     const classList = element.className;
 if (classList.includes(`lang-${languageToUse}`)) {
 element.style.display = 'block';}
 });
+
+function loadImages() {
+const images = document.querySelectorAll('img[data-src]');
+images.forEach(img => {
+const imgSrc = img.getAttribute('data-src');
+img.src = imgSrc;
+img.removeAttribute('data-src');
+    });
+}
+
+function checkConnection() {if (navigator.onLine) {loadImages();}
+}
+
+window.addEventListener('online', loadImages);
+window.addEventListener('load', checkConnection);
+
+const fixedDiv = document.querySelector('.fixed');
+window.addEventListener('scroll', () => {
+if (window.scrollY > 100) {fixedDiv.style.display = 'block'; }
+});
+
+
