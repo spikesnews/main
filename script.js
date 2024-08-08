@@ -18,6 +18,13 @@ const defaultLanguage = 'en';
 const languageToUse = supportedLanguages.includes(languageWithoutHyphen) ? languageWithoutHyphen : defaultLanguage;
 
 document.addEventListener('DOMContentLoaded', () => {
+const langElements = document.querySelectorAll('[class^="lang-"]');
+langElements.forEach((element) => {
+const classList = element.className;
+if (classList.includes(`lang-${languageToUse}`)) {element.style.display = 'block';}
+});
+
+document.addEventListener('DOMContentLoaded', () => {
 document.querySelectorAll('li').forEach(li => {
 li.addEventListener('click', (event) => {
 document.querySelectorAll('.menu').forEach(menu => {menu.remove();});
@@ -76,6 +83,7 @@ menu.appendChild(copyDiv);
 return menu;
 }
 
+//Search
 document.getElementById('search').addEventListener('input', function() {
 let query = this.value.toLowerCase();
 let resultsContainer = document.getElementById('results');
@@ -100,13 +108,67 @@ document.querySelectorAll('.results a').forEach(link => {
 link.textContent = link.textContent.replace('topic/', '');
 });
 
-const langElements = document.querySelectorAll('[class^="lang-"]');
-langElements.forEach((element) => {
-    const classList = element.className;
-if (classList.includes(`lang-${languageToUse}`)) {
-element.style.display = 'block';}
+//Main page
+function getCurrentDateId() {
+const today = new Date();
+const year = today.getFullYear();
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const day = String(today.getDate()).padStart(2, '0');
+return `${year}${month}${day}`;
+}
+
+async function fetchPageContent(pageName) {
+const response = await fetch(`/topic/${pageName}`);
+const text = await response.text();
+const parser = new DOMParser();
+const doc = parser.parseFromString(text, 'text/html');
+return doc;
+}
+
+async function fetchPagesList() {
+const response = await fetch('/pages.json');
+return await response.json();
+}
+
+async function displayContent() {
+const contentDiv = document.getElementById('content');
+const todayId = getCurrentDateId();
+let displayedItems = 0;
+const pages = await fetchPagesList();
+
+for (const page of pages) {
+if (displayedItems >= 50) break;
+const doc = await fetchPageContent(page);
+const items = doc.querySelectorAll(`li[id^="${todayId}"]`);
+items.forEach(item => {
+if (displayedItems < 15) {
+const link = document.createElement('a');
+link.href = `/topic/${page}`;
+link.textContent = `${page}`;
+contentDiv.appendChild(link);
+contentDiv.appendChild(document.createElement('br'));
+contentDiv.appendChild(item.cloneNode(true));
+contentDiv.appendChild(document.createElement('br'));
+                displayedItems++;
+            }
+        });
+    }
+}
+document.addEventListener('DOMContentLoaded', displayContent);
+
+//Popup
+document.addEventListener('DOMContentLoaded', function () {
+var showButton = document.querySelector('.show');
+var popup = document.querySelector('.popup');
+var closeButton = document.querySelector('.close');
+
+showButton.addEventListener('click', function () {popup.style.display = 'block';
 });
 
+closeButton.addEventListener('click', function () {popup.style.display = 'none';});
+});
+
+//Files
 function loadImages() {
 const images = document.querySelectorAll('img[data-src]');
 images.forEach(img => {
@@ -121,10 +183,4 @@ function checkConnection() {if (navigator.onLine) {loadImages();}
 
 window.addEventListener('online', loadImages);
 window.addEventListener('load', checkConnection);
-
-const fixedDiv = document.querySelector('.fixed');
-window.addEventListener('scroll', () => {
-if (window.scrollY > 100) {fixedDiv.style.display = 'block'; }
-});
-
 
